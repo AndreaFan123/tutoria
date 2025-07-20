@@ -2,10 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.session import engine
+from app.db.init_db import init_db
 from app.models import user
 from app.api import auth
 
 app = FastAPI(title="Tutoria API")
+
+init_db()
 
 app.add_middleware(
     CORSMiddleware,
