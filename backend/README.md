@@ -81,15 +81,38 @@ Student ──> 閱讀 lesson
 
 ## API 規劃（MVP）
 
-| Method | Path                           | 說明               | 權限    |
-| ------ | ------------------------------ | ------------------ | ------- |
-| POST   | `/auth/teacher/register`       | 老師註冊           | Public  |
-| POST   | `/auth/teacher/login`          | 老師登入           | Public  |
-| POST   | `/teacher/students`            | 建立學生帳號       | Teacher |
-| POST   | `/auth/student/login`          | 學生登入           | Public  |
-| GET    | `/student/lessons`             | 取得分配的教案列表 | Student |
-| GET    | `/student/lesson/{id}`         | 查看教案內容與語音 | Student |
-| POST   | `/student/lesson/{id}/comment` | 留言給老師         | Student |
+| Method | Path                            | 說明                             | 權限    | 備註               |
+| ------ | ------------------------------- | -------------------------------- | ------- | ------------------ |
+| POST   | `/auth/teacher/register`        | 老師註冊                         | Public  | -                  |
+| POST   | `/auth/teacher/login`           | 老師登入                         | Public  | -                  |
+| GET    | `/teacher/me`                   | 取得老師個人資料                 | Teacher | -                  |
+| POST   | `/teachers/upload-id`           | 老師上傳證件圖檔（初期非強制）   | Teacher | MVP 先支援單次上傳 |
+| POST   | `/teacher/students`             | 建立學生帳號                     | Teacher | -                  |
+| POST   | `/teacher/lessons`              | 建立教案                         | Teacher | -                  |
+| GET    | `/teacher/lessons`              | 取得老師的教案列表               | Teacher | -                  |
+| GET    | `/teacher/lesson/{id}`          | 查看教案內容與語音               | Teacher | -                  |
+| POST   | `/teacher/lesson/{id}/comment`  | 回覆學生留言                     | Teacher | -                  |
+| POST   | `/teacher/lesson/{id}/practice` | 標記學生已練習                   | Teacher | -                  |
+| POST   | `/auth/student/login`           | 學生登入                         | Public  | -                  |
+| GET    | `/student/lessons`              | 取得分配的教案列表               | Student | -                  |
+| GET    | `/student/lesson/{id}`          | 查看教案內容與語音               | Student | -                  |
+| POST   | `/student/lesson/{id}/comment`  | 留言給老師                       | Student | -                  |
+| GET    | `/admin/teachers/unverified`    | 後台：檢視尚未驗證老師清單       | Admin   | -                  |
+| POST   | `/admin/teachers/verify`        | 後台：驗證老師帳號（含上傳資料） | Admin   | -                  |
+
+## 🚧 未來擴充功能（非 MVP 階段）
+
+| Method | Path                                | 說明                           | 權限    | 備註                      |
+| ------ | ----------------------------------- | ------------------------------ | ------- | ------------------------- |
+| POST   | `/teachers/upload-id-front`         | 老師上傳證件正面照             | Teacher | 🚧 分段上傳               |
+| POST   | `/teachers/upload-id-back`          | 老師上傳證件反面照             | Teacher | 🚧 分段上傳               |
+| POST   | `/teachers/upload-certificate`      | 老師上傳教學證照               | Teacher | 🚧 附加資歷佐證           |
+| GET    | `/admin/teacher/{id}/id-images`     | 後台：檢視單一老師證件圖       | Admin   | 🚧 用於人工審核           |
+| PATCH  | `/admin/teacher/{id}/verify-status` | 後台：手動設定帳號是否通過驗證 | Admin   | 🚧 可作為細部狀態控管     |
+| POST   | `/admin/teacher/{id}/reject`        | 後台：駁回老師驗證申請         | Admin   | 🚧 可搭配通知理由         |
+| POST   | `/teachers/reupload-id`             | 老師補件上傳證件               | Teacher | 🚧 配合駁回通知重新上傳   |
+| GET    | `/teachers/verify-status`           | 老師查詢目前驗證進度           | Teacher | 🚧 UI 顯示驗證中/已通過等 |
+| GET    | `/admin/teacher-audit-log/{id}`     | 後台：查看老師帳號審核歷史     | Admin   | 🚧 若需留痕，可補建此功能 |
 
 ---
 
