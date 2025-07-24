@@ -8,7 +8,7 @@ from app.models import Teacher
 router = APIRouter()
 
 @router.post("/auth/teacher/register", response_model=TeacherOut)
-def register_teach(teacher: TeacherCreate, db: Session = Depends(get_db)):
+def register_teacher(teacher: TeacherCreate, db: Session = Depends(get_db)):
     # Check if account is existed
     existing = db.query(Teacher).filter(Teacher.email == teacher.email).first()
     if existing:
