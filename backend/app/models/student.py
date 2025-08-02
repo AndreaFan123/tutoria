@@ -8,7 +8,7 @@ class Student(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     login_code = Column(String, unique=True, index=True, nullable=False)
-    teacher_id = Column(Integer, ForeignKey("teachers.id"), nullable=False)
+    teacher_id = Column(Integer, ForeignKey("teacher.id"), nullable=False)
 
     teacher = relationship("Teacher", back_populates="students")
     lessons = relationship("Lesson", back_populates="student", cascade="all, delete-orphan")
