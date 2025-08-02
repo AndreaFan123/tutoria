@@ -9,6 +9,7 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-
+    student_id = Column(Integer, ForeignKey("student.id"), nullable=False)
+    student = relationship("Student", back_populates="comments")
     lesson_id = Column(Integer, ForeignKey("lesson.id"), nullable=False)
     lesson = relationship("Lesson", back_populates="comments")

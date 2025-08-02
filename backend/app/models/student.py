@@ -12,4 +12,4 @@ class Student(Base):
 
     teacher = relationship("Teacher", back_populates="students")
     lessons = relationship("Lesson", back_populates="student", cascade="all, delete-orphan")
-    comments = relationship("Comment", back_populates="lesson", cascade="all, delete-orphan")
+    comments = relationship("Comment", back_populates="student", cascade="all, delete-orphan")
