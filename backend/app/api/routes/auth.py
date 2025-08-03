@@ -15,7 +15,7 @@ def register_teacher(teacher: TeacherCreate, db: Session = Depends(get_db)):
     # Check if account is existed
     existing = db.query(Teacher).filter(Teacher.email == teacher.email).first()
     if existing:
-        raise HTTPException(status=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="Email already registered")
     
     return create_teacher(db, teacher)
 
@@ -23,7 +23,7 @@ def register_teacher(teacher: TeacherCreate, db: Session = Depends(get_db)):
 def register_student(student: StudentCreate, db: Session = Depends(get_db)):
     existing = db.query(Student).filter(Student.login_code == student.login_code).first()
     if existing:
-        raise HTTPException(status=400, detail="Login code already register")
+        raise HTTPException(status_code=400, detail="Login code already register")
     
     return create_student(db, student)
 
@@ -31,5 +31,5 @@ def register_student(student: StudentCreate, db: Session = Depends(get_db)):
 def login_student(payload: StudentLogin, db: Session = Depends(get_db)):
     student = get_student_by_login_code(db, payload.login_code)
     if not student:
-        raise HTTPException(status=400, detail="Invalid login code")
+        raise HTTPException(status_code=400, detail="Invalid login code")
     return student

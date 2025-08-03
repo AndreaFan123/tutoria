@@ -4,7 +4,7 @@ from typing import Optional
 class StudentCreate(BaseModel):
     name: str
     login_code: constr(min_length=4)
-    teacher_id: int
+    invite_code: str
 
 class StudentLogin(BaseModel):
     login_code: constr(min_length=4)
