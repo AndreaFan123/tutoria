@@ -17,6 +17,7 @@ class TeacherOut(BaseModel):
     id: int
     email: EmailStr
     full_name: Optional[str]
+    invite_code: str
 
     class Config:
         orm_mode = True
