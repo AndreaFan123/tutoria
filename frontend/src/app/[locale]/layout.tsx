@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Navbar from "../components/common/Navbar";
 
+import "./globals.css";
+import Footer from "../components/common/Footer";
+
 export default async function LocaleLayout({
   children,
   params,
@@ -18,10 +21,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="antialiased scroll-smooth">
         <NextIntlClientProvider>
           <Navbar />
           {children}
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
