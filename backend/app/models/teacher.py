@@ -19,4 +19,4 @@ class Teacher(Base):
     full_name = Column(String, nullable=True)
     subscription_level = Column(Enum(SubscriptionLevel), default=SubscriptionLevel.FREE, nullable=False)
     students = relationship("Student", back_populates="teacher")
-    invite_code = relationship("InviteCode", back_populates="owner", cascade="all, delete")
+    invite_codes = relationship("InviteCode", back_populates="owner", cascade="all, delete")

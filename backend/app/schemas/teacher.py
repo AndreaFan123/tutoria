@@ -1,5 +1,8 @@
+from typing import List
 from pydantic import BaseModel, EmailStr, constr
 from typing import Optional
+from app.schemas.invite_code import InviteCodeOut
+from app.models.teacher import SubscriptionLevel
 
 # Register
 class TeacherCreate(BaseModel):
@@ -17,7 +20,8 @@ class TeacherOut(BaseModel):
     id: int
     email: EmailStr
     full_name: Optional[str]
-    invite_code: str
+    subscription_level: SubscriptionLevel
+    invite_codes: List[InviteCodeOut] = []
 
     class Config:
         orm_mode = True

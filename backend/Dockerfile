@@ -17,6 +17,10 @@ RUN poetry config virtualenvs.create false && poetry install --only main --no-ro
 # Copy the FastAPI app code to the container
 COPY app /app/app
 
+# Copy the Alembic migrations directory to the container
+COPY alembic.ini alembic.ini
+COPY alembic/ alembic/
+
 # Expose the port FastAPI will run on
 EXPOSE 8000
 

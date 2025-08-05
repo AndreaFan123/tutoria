@@ -13,3 +13,4 @@ class Student(Base):
     teacher = relationship("Teacher", back_populates="students")
     lessons = relationship("Lesson", back_populates="student", cascade="all, delete-orphan")
     comments = relationship("Comment", back_populates="student", cascade="all, delete-orphan")
+    used_invite_code = relationship("InviteCode", back_populates="student", uselist=False)
