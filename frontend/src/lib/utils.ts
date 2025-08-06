@@ -26,3 +26,28 @@ export const validateName = (name: string): boolean => {
 export const validateInviteCode = (inviteCode: string): boolean => {
   return inviteCode.trim().length > 0;
 };
+
+// Font utilities
+export const fontClass = {
+  mulish: "font-mulish",
+  notoSansTC: "font-noto-sans-tc",
+  sans: "font-sans",
+} as const;
+
+export const getFontClass = (font: keyof typeof fontClass) => {
+  return fontClass[font];
+};
+
+// Get font class based on locale
+export const getFontClassByLocale = (locale: string) => {
+  switch (locale) {
+    case "zh-TW":
+    case "zh-CN":
+      return fontClass.notoSansTC;
+    case "en-US":
+    case "en":
+      return fontClass.mulish;
+    default:
+      return fontClass.mulish;
+  }
+};

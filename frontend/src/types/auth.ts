@@ -25,8 +25,6 @@ export interface InviteCode {
   id: number;
   code: string;
   is_used: boolean;
-  teacher_id: number;
-  student_id?: number;
 }
 
 // Teacher Response Type
@@ -35,6 +33,9 @@ export interface TeacherResponse {
   email: string;
   full_name?: string;
   subscription_level: SubscriptionLevel;
+  created_at: string; // ISO datetime string
+  last_login_at?: string; // ISO datetime string
+  is_active: boolean;
   invite_codes: InviteCode[];
 }
 
