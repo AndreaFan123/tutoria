@@ -1,15 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.schemas.teacher import TeacherCreate, TeacherOut
-from app.schemas.student import StudentCreate, StudentOut, StudentLogin
-from app.crud.teacher import create_teacher
-from app.crud.student import create_student, get_student_by_login_code
-from app.db.session import get_db
 from app.models import Teacher, Student
+from app.schemas.teacher import TeacherCreate, TeacherOut, TeacherLogin
+from app.schemas.student import StudentCreate, StudentOut, StudentLogin
+from app.schemas.token import Token
+from app.crud.teacher import create_teacher, get_teacher_by_email
+from app.crud.student import create_student, get_student_by_login_code
+from app.core.security import verify_password, create_access_token
+from app.db.session import get_db
+
 
 router = APIRouter()
 
+
+# Teacher
 @router.post("/auth/teacher/register", response_model=TeacherOut)
 def register_teacher(teacher: TeacherCreate, db: Session = Depends(get_db)):
     # Check if account is existed
@@ -19,6 +24,20 @@ def register_teacher(teacher: TeacherCreate, db: Session = Depends(get_db)):
     
     return create_teacher(db, teacher)
 
+
+@router.post("/auth/teacher/login", response_model=Token)
+def login_teacher(payload: TeacherLogin, db: Session = Depends(get_db)):
+    teacher = get_teacher_by_email(db, payload.email)
+    if not teacher or not verify_password(payload.password, teacher.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    token = create_access_token(subject=str(teacher.id))
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
+
+# Student
 @router.post("/auth/student/register", response_model=StudentOut)
 def register_student(student: StudentCreate, db: Session = Depends(get_db)):
     existing = db.query(Student).filter(Student.login_code == student.login_code).first()

@@ -86,6 +86,12 @@ poetry run alembic revision --autogenerate -m "Create invite_code table"
 poetry run alembic upgrade head
 ```
 
+### 確認目前 DB
+
+```bash
+poetry run alembic current
+```
+
 ---
 
 ### 7️⃣ 驗證資料表

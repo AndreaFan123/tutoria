@@ -9,6 +9,7 @@ class TeacherCreate(BaseModel):
     email: EmailStr
     password: constr(min_length=6)
     full_name: Optional[str] = None
+    subscription_level: SubscriptionLevel = SubscriptionLevel.FREE
 
 # Login
 class TeacherLogin(BaseModel):
