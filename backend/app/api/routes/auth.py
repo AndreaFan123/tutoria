@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from app.models import Teacher, Student
 from app.schemas.teacher import TeacherCreate, TeacherOut, TeacherLogin
@@ -30,6 +31,9 @@ def login_teacher(payload: TeacherLogin, db: Session = Depends(get_db)):
     teacher = get_teacher_by_email(db, payload.email)
     if not teacher or not verify_password(payload.password, teacher.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    teacher.last_login_at = datetime.utcnow()
+    db.commit()
     
     token = create_access_token(subject=str(teacher.id))
     return {

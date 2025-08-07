@@ -30,3 +30,10 @@ def create_teacher(db: Session, teacher: TeacherCreate) -> Teacher:
 
 def get_teacher_by_email(db: Session, email: str) -> Teacher | None:
     return db.query(Teacher).filter(Teacher.email == email).first()
+
+
+def get_teacher_invite_codes(db: Session, teacher_id: int, only_unused: bool = False):
+    query = db.query(InviteCode).filter(InviteCode.teacher_id == teacher_id)
+    if only_unused:
+        query = query.filter(InviteCode.is_used == False)
+    return query.all()

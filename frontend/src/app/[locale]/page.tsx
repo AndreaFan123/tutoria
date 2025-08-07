@@ -1,12 +1,15 @@
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import HeroSection from "../components/landing/HeroSection";
+import ServiceSection from "../components/landing/ServiceSection";
+import ToolsSection from "../components/landing/ToolsSection";
 
 export default function HomePage() {
   const t = useTranslations("HomePage");
   return (
-    <div>
-      <h1>{t("title")}</h1>
-      <Link href="/about">{t("about")}</Link>
-    </div>
+    <main className="grid gap-44 lg:gap-60">
+      <HeroSection />
+      <ServiceSection />
+      <ToolsSection />
+    </main>
   );
 }
