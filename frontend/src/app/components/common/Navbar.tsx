@@ -34,11 +34,13 @@ export default function Navbar() {
       >
         <div className="flex w-full justify-between p-5 container mx-auto">
           <div>
-            <span className="text-3xl font-black">Tutoria</span>
+            <Link href="/" className="text-3xl font-black">
+              Tutoria
+            </Link>
           </div>
           <div className="flex gap-4">
             <DropdownMenu>
-              <DropdownMenuTrigger className="px-4 py-2 rounded-md hover:bg-gray-100/50 transition-colors">
+              <DropdownMenuTrigger className="px-4 py-2 text-md font-semibold rounded-md hover:bg-gray-100/50 transition-colors">
                 Login
               </DropdownMenuTrigger>
               <DropdownMenuContent className="flex flex-col p-3 gap-3 bg-white/30 backdrop-blur-lg ">
@@ -57,7 +59,7 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
-              <DropdownMenuTrigger className="px-4 py-2 rounded-md hover:bg-gray-100/50 transition-colors">
+              <DropdownMenuTrigger className="px-4 py-2 text-md font-semibold  rounded-md hover:bg-gray-100/50 transition-colors">
                 Sign In
               </DropdownMenuTrigger>
               <DropdownMenuContent className="flex flex-col p-3 gap-3 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-lg">
