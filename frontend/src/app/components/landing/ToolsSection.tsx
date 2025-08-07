@@ -1,6 +1,6 @@
 import { studentTools, teacherTools } from "@/constants/services";
 import ToolHeadline from "./ToolHeadline";
-import ToolCard from "@/components/landing/ToolCard";
+import ToolCard from "@/app/components/landing/ToolCard";
 
 export default function ToolsSection() {
   return (

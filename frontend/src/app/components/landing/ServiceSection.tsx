@@ -1,4 +1,4 @@
-import ServiceCard from "@/components/landing/ServiceCard";
+import ServiceCard from "@/app/components/landing/ServiceCard";
 import { services } from "@/constants/services";
 
 export default function ServiceSection() {
