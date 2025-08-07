@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
-import HeroSection from "../components/landing/HeroSection";
-import ServiceSection from "../components/landing/ServiceSection";
-import ToolsSection from "../components/landing/ToolsSection";
+import HeroSection from "@/app/components/landing/HeroSection";
+import ServiceSection from "@/app/components/landing/ServiceSection";
+import ToolsSection from "@/app/components/landing/ToolsSection";
 
 export default function HomePage() {
   const t = useTranslations("HomePage");
