@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-light-primary text-brand-fg py-4 w-full">
+    <footer className="text-brand-fg py-4 w-full rounded-t-[40px] border-t-4 border-brand-fg">
       <div className="container mx-auto lg:flex lg:justify-between">
         <div className="lg:w-[40%]">
           <p className="text-2xl font-black">Tutoria</p>

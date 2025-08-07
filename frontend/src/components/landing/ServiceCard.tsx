@@ -15,7 +15,7 @@ export default function ServiceCard({
   imgAlt,
 }: ServiceCardProps) {
   return (
-    <Card className="w-full lg:w-1/2 border-brand-fg border-2">
+    <Card className="w-full lg:w-1/2 border-brand-fg border-2 shadow-[4px_8px_0_0_rgba(0,0,0,1)]">
       <div className="flex">
         <div className="flex flex-col gap-8 ">
           <CardHeader>

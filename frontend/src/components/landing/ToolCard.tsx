@@ -7,7 +7,7 @@ interface ToolCardProps {
 
 export default function ToolCard({ toolTitle, toolDes }: ToolCardProps) {
   return (
-    <Card className="gap-1">
+    <Card className="gap-1 border-brand-fg shadow-[4px_8px_0_0_rgba(0,0,0,1)]">
       <CardHeader>
         <CardTitle className="text-lg">{toolTitle}</CardTitle>
       </CardHeader>

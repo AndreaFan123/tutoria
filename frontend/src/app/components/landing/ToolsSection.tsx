@@ -4,7 +4,7 @@ import ToolCard from "@/components/landing/ToolCard";
 
 export default function ToolsSection() {
   return (
-    <section className="bg-brand-primary py-11">
+    <section className="py-16">
       <div className="container p-5 mx-auto flex flex-col justify-center gap-11 lg:flex-row">
         <div className="flex flex-col gap-5 lg:w-[35%]">
           <div>

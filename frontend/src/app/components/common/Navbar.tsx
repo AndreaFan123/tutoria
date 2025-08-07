@@ -28,7 +28,7 @@ export default function Navbar() {
         role="navigation"
         className={`mx-auto fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-lg shadow-lg border-b border-gray-200/50"
+            ? "bg-white/10 backdrop-blur-lg shadow-lg"
             : "bg-white/10 backdrop-blur-sm"
         }`}
       >
@@ -41,7 +41,7 @@ export default function Navbar() {
               <DropdownMenuTrigger className="px-4 py-2 rounded-md hover:bg-gray-100/50 transition-colors">
                 Login
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex flex-col p-3 gap-3 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-lg">
+              <DropdownMenuContent className="flex flex-col p-3 gap-3 bg-white/30 backdrop-blur-lg ">
                 <Link
                   href="/auth/student/login"
                   className="hover:text-blue-600 transition-colors"
