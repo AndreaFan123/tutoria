@@ -10,7 +10,7 @@ export default function ServiceSection() {
             Our goal
           </h3>
           {/* TODO: Amend later */}
-          <p className="text-lg text-brand-fg font-medium lg:w-1/2 text-balance">
+          <p className="text-lg text-brand-fg font-medium w-full lg:w-1/2 text-balance">
             At our digital marketing agency, we offer a range of services to
             help businesses grow and succeed online. These services include...
           </p>

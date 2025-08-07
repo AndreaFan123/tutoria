@@ -6,7 +6,7 @@ import ToolsSection from "../components/landing/ToolsSection";
 export default function HomePage() {
   const t = useTranslations("HomePage");
   return (
-    <main className="grid gap-60">
+    <main className="grid gap-44 lg:gap-60">
       <HeroSection />
       <ServiceSection />
       <ToolsSection />

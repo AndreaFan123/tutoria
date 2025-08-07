@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const studentFormSchema = z.object({
   name: z.string().min(2).max(50),
@@ -79,7 +80,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Your Name" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  placeholder="Enter Your Name"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -92,7 +97,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Login code</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Login Code" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  placeholder="Enter Login Code"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Enter 6 digits with characters for future login
@@ -108,7 +117,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Invite Code</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Invite Code" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  placeholder="Enter Invite Code"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Enter 6 digits you've received from teacher
@@ -131,7 +144,12 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter Email" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  type="email"
+                  placeholder="Enter Email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,7 +162,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Password" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  placeholder="Enter Password"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Must mix with letters and numbers, at least 6 characters
@@ -160,7 +182,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Full Name" {...field} />
+                <Input
+                  className="border-brand-fg border-2 h-[45px]"
+                  placeholder="Enter Full Name"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -179,7 +205,23 @@ export default function RegisterForm({ role }: RegisterFormProps) {
           ) : (
             <TeacherFields form={form} />
           )}
-          <Button type="submit">Submit</Button>
+          <div className="flex flex-col gap-3 items-start md:flex-row md:items-center">
+            <Button type="submit">Submit</Button>
+            <p>
+              Already have an account?{" "}
+              <Link
+                className="underline font-bold"
+                href={
+                  role === "student"
+                    ? "/auth/student/login"
+                    : "/auth/teacher/login"
+                }
+              >
+                Login
+              </Link>{" "}
+              here
+            </p>
+          </div>
         </form>
       </Form>
     </div>
