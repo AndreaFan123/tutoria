@@ -44,8 +44,8 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider>
           <Navbar />
-          <main className="pt-28 lg:pt-36">{children}</main>
-          {/* <Footer /> */}
+          {children}
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
