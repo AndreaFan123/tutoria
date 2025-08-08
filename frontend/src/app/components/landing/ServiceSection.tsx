@@ -5,7 +5,7 @@ export default function ServiceSection() {
   return (
     <section>
       <div className="container mx-auto flex flex-col gap-11 px-5">
-        <article className="flex flex-col lg:flex-row items-start lg:items-center gap-10">
+        <article className="flex flex-col lg:flex-row items-start lg:items-center gap-5">
           <h3 className="text-4xl uppercase font-black text-white bg-brand-fg p-2">
             Our goal
           </h3>
