@@ -2,9 +2,9 @@ import PricingCard from "@/app/components/pricing/PricingCard";
 import { pricing } from "@/constants/pricing";
 import Link from "next/link";
 
-export default function PricingPage() {
+export default function PricingSection() {
   return (
-    <section className="min-h-screen py-16 mt-24">
+    <section className="min-h-screen pb-16">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
