@@ -5,6 +5,7 @@ import { Mulish, Noto_Sans_TC } from "next/font/google";
 import { getFontFamily } from "@/lib/fonts";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
+import { Toaster } from "../components/ui/sonner";
 
 import "./globals.css";
 
@@ -22,14 +23,14 @@ const notoSansTC = Noto_Sans_TC({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default async function LocaleLayout({
+export default function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -46,6 +47,7 @@ export default async function LocaleLayout({
           <Navbar />
           {children}
           <Footer />
+          <Toaster richColors position="top-center" />
         </NextIntlClientProvider>
       </body>
     </html>

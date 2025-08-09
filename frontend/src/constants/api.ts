@@ -10,8 +10,7 @@ import {
 } from "@/types/auth";
 
 // API 基礎 URL
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+export const API_BASE_URL = process.env.API_ENDPOINT || "http://localhost:8000";
 
 // API 端點
 export const API_ENDPOINTS = {
@@ -19,6 +18,7 @@ export const API_ENDPOINTS = {
   TEACHER: {
     REGISTER: "/auth/teacher/register",
     LOGIN: "/auth/teacher/login",
+    INFO: (id: number) => `/auth/teacher/${id}`,
   },
   // 學生相關 API
   STUDENT: {
@@ -44,16 +44,50 @@ export class ApiService {
     };
 
     try {
-      const response = await fetch(url, defaultOptions);
-
-      if (!response.ok) {
-        const errorData: ApiErrorResponse = await response.json();
-        throw new Error(
-          errorData.detail || `HTTP error! status: ${response.status}`
-        );
+      // Attach Authorization header if access token exists (client-side only)
+      const token =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("access_token")
+          : null;
+      const headers = new Headers(defaultOptions.headers);
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
       }
 
-      return await response.json();
+      const response = await fetch(url, { ...defaultOptions, headers });
+      const contentType = response.headers.get("content-type") || "";
+
+      if (!response.ok) {
+        let message = `HTTP error! status: ${response.status}`;
+        try {
+          if (contentType.includes("application/json")) {
+            const errorData: ApiErrorResponse = await response.json();
+            message = errorData.detail || message;
+          } else {
+            const text = await response.text();
+            message = text || message;
+          }
+        } catch {
+          // noop, fall back to default message
+        }
+        throw new Error(message);
+      }
+
+      if (response.status === 204) {
+        // No content
+        return undefined as unknown as T;
+      }
+
+      if (contentType.includes("application/json")) {
+        return await response.json();
+      }
+
+      const text = await response.text();
+      throw new Error(
+        `Unexpected non-JSON response from API. Verify NEXT_PUBLIC_API_URL points to your FastAPI server. Status: ${
+          response.status
+        }. Body: ${text.slice(0, 200)}`
+      );
     } catch (error) {
       console.error("API request failed:", error);
       throw error;
@@ -75,6 +109,14 @@ export class ApiService {
     return this.request<TokenResponse>(API_ENDPOINTS.TEACHER.LOGIN, {
       method: "POST",
       body: JSON.stringify(data),
+    });
+  }
+
+  // 取得老師資訊
+  static async getTeacherById(id: number): Promise<TeacherResponse> {
+    return this.request<TeacherResponse>(API_ENDPOINTS.TEACHER.INFO(id), {
+      method: "GET",
+      cache: "no-store",
     });
   }
 

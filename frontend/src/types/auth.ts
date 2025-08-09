@@ -60,6 +60,7 @@ export interface StudentResponse {
   id: number;
   name: string;
   login_code: string;
+  invite_code: string;
   teacher_id: number;
 }
 
@@ -67,6 +68,7 @@ export interface StudentResponse {
 export interface TokenResponse {
   access_token: string;
   token_type: string;
+  teacher_id: number;
 }
 
 // API error response type

@@ -1,7 +1,12 @@
 "use client";
+// TODO: Add eye and eye closed for password
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/app/components/ui/button";
@@ -15,7 +20,15 @@ import {
   FormMessage,
 } from "@/app/components/ui/form";
 import { Input } from "@/app/components/ui/input";
-import Link from "next/link";
+import { toast } from "sonner";
+
+import { ApiService } from "@/constants/api";
+import type {
+  TeacherRegisterRequest,
+  TeacherResponse,
+  StudentRegisterRequest,
+} from "@/types/auth";
+import { Locale } from "@/i18n/request";
 
 const studentFormSchema = z.object({
   name: z.string().min(2).max(50),
@@ -55,22 +68,54 @@ const formConfig = {
 
 type RegisterFormProps = {
   role: "student" | "teacher";
+  locale: Locale;
 };
 
-export default function RegisterForm({ role }: RegisterFormProps) {
+export default function RegisterForm({ role, locale }: RegisterFormProps) {
   const { schema: formSchema, defaultValues } = formConfig[role];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsSubmitting(true);
+
+      if (role === "teacher") {
+        const payload = values as TeacherRegisterRequest;
+        const _result: TeacherResponse = await ApiService.registerTeacher(
+          payload
+        );
+        toast.success("Registered successfully. Please log in.");
+        router.push(`/${locale}/auth/teacher/login`);
+        return;
+      }
+
+      if (role === "student") {
+        const payload = values as StudentRegisterRequest;
+        const _result: StudentRegisterRequest =
+          await ApiService.registerStudent(payload);
+        toast.success("Registered successfully. Please log in.");
+        router.push(`/${locale}/auth/student/login`);
+        return;
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to register";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const StudentFields = ({ form }: { form: any }) => {
+  const StudentFields = ({
+    form,
+  }: {
+    form: UseFormReturn<StudentRegisterRequest>;
+  }) => {
     return (
       <>
         <FormField
@@ -134,7 +179,11 @@ export default function RegisterForm({ role }: RegisterFormProps) {
     );
   };
 
-  const TeacherFields = ({ form }: { form: any }) => {
+  const TeacherFields = ({
+    form,
+  }: {
+    form: UseFormReturn<TeacherRegisterRequest>;
+  }) => {
     return (
       <>
         <FormField
@@ -164,6 +213,7 @@ export default function RegisterForm({ role }: RegisterFormProps) {
               <FormControl>
                 <Input
                   className="border-brand-fg border-2 h-[45px]"
+                  type="password"
                   placeholder="Enter Password"
                   {...field}
                 />
@@ -201,20 +251,26 @@ export default function RegisterForm({ role }: RegisterFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {role === "student" ? (
-            <StudentFields form={form} />
+            <StudentFields
+              form={form as UseFormReturn<StudentRegisterRequest>}
+            />
           ) : (
-            <TeacherFields form={form} />
+            <TeacherFields
+              form={form as UseFormReturn<TeacherRegisterRequest>}
+            />
           )}
           <div className="flex flex-col gap-3 items-start md:flex-row md:items-center">
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
             <p>
               Already have an account?{" "}
               <Link
                 className="underline font-bold"
                 href={
                   role === "student"
-                    ? "/auth/student/login"
-                    : "/auth/teacher/login"
+                    ? `/${locale}/auth/student/login`
+                    : `/${locale}/auth/teacher/login`
                 }
               >
                 Login
