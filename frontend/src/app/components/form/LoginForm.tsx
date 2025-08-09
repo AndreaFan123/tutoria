@@ -1,7 +1,9 @@
 "use client";
 
+// TODO: Add eye and eye closed for password
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/app/components/ui/button";
@@ -16,13 +18,21 @@ import {
 } from "@/app/components/ui/form";
 import { Input } from "@/app/components/ui/input";
 import Link from "next/link";
+import { Locale } from "@/i18n/request";
+import {
+  StudentLoginRequest,
+  TeacherLoginRequest,
+  TokenResponse,
+} from "@/types/auth";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ApiService } from "@/constants";
+import { toast } from "sonner";
 
 const studentFormSchema = z.object({
-  name: z.string().min(2).max(50),
   login_code: z
     .string()
     .min(6, "Login code must be at least 6 characters long"),
-  invite_code: z.string().min(4, "Invite code is required"),
 });
 
 const teacherFormSchema = z.object({
@@ -31,7 +41,6 @@ const teacherFormSchema = z.object({
     .string()
     .min(6, "Password must be at least 6 characters long")
     .max(10, "Password must be at most 10 characters long"),
-  full_name: z.string().min(5).max(50).optional(),
 });
 
 const formConfig = {
@@ -53,43 +62,46 @@ const formConfig = {
   },
 };
 
-type RegisterFormProps = {
+type LoginFormProps = {
   role: "student" | "teacher";
+  locale: Locale;
 };
 
-export default function LoginForm({ role }: RegisterFormProps) {
+export default function LoginForm({ role, locale }: LoginFormProps) {
   const { schema: formSchema, defaultValues } = formConfig[role];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsSubmitting(true);
+
+      if (role === "teacher") {
+        const payload = values as TeacherLoginRequest;
+        const result: TokenResponse = await ApiService.loginTeacher(payload);
+        // Save token for subsequent API calls
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("access_token", result.access_token);
+          window.localStorage.setItem("token_type", result.token_type);
+          window.localStorage.setItem("teacher_id", String(result.teacher_id));
+        }
+        toast.success("Login successfully.");
+        router.push(`/${locale}/admin/teacher/${result.teacher_id}`);
+      }
+    } catch (error) {}
   };
 
-  const StudentFields = ({ form }: { form: any }) => {
+  const StudentFields = ({
+    form,
+  }: {
+    form: UseFormReturn<StudentLoginRequest>;
+  }) => {
     return (
       <>
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  className="border-brand-fg border-2 h-[45px]"
-                  placeholder="Enter Your Name"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="login_code"
@@ -98,6 +110,7 @@ export default function LoginForm({ role }: RegisterFormProps) {
               <FormLabel>Login code</FormLabel>
               <FormControl>
                 <Input
+                  type="password"
                   className="border-brand-fg border-2 h-[45px]"
                   placeholder="Enter Login Code"
                   {...field}
@@ -110,31 +123,15 @@ export default function LoginForm({ role }: RegisterFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="invite_code"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Invite Code</FormLabel>
-              <FormControl>
-                <Input
-                  className="border-brand-fg border-2 h-[45px]"
-                  placeholder="Enter Invite Code"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                Enter 6 digits you've received from teacher
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
       </>
     );
   };
 
-  const TeacherFields = ({ form }: { form: any }) => {
+  const TeacherFields = ({
+    form,
+  }: {
+    form: UseFormReturn<TeacherLoginRequest>;
+  }) => {
     return (
       <>
         <FormField
@@ -163,6 +160,7 @@ export default function LoginForm({ role }: RegisterFormProps) {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
+                  type="password"
                   className="border-brand-fg border-2 h-[45px]"
                   placeholder="Enter Password"
                   {...field}
@@ -171,23 +169,6 @@ export default function LoginForm({ role }: RegisterFormProps) {
               <FormDescription>
                 Must mix with letters and numbers, at least 6 characters
               </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="full_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input
-                  className="border-brand-fg border-2 h-[45px]"
-                  placeholder="Enter Full Name"
-                  {...field}
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -201,9 +182,9 @@ export default function LoginForm({ role }: RegisterFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {role === "student" ? (
-            <StudentFields form={form} />
+            <StudentFields form={form as UseFormReturn<StudentLoginRequest>} />
           ) : (
-            <TeacherFields form={form} />
+            <TeacherFields form={form as UseFormReturn<TeacherLoginRequest>} />
           )}
           <div className="flex flex-col gap-3 items-start md:flex-row md:items-center">
             <Button type="submit">Submit</Button>
