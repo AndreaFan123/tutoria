@@ -9,26 +9,32 @@ import {
   TokenResponse,
 } from "@/types/auth";
 
-// API 基礎 URL
+// API URL
 export const API_BASE_URL = process.env.API_ENDPOINT || "http://localhost:8000";
 
-// API 端點
+// API Endpoint
 export const API_ENDPOINTS = {
-  // 老師相關 API
+  // Teacher APIs
   TEACHER: {
     REGISTER: "/auth/teacher/register",
     LOGIN: "/auth/teacher/login",
     INFO: (id: number) => `/auth/teacher/${id}`,
   },
-  // 學生相關 API
+  // Student APIs
   STUDENT: {
     REGISTER: "/auth/student/register",
     LOGIN: "/auth/student/login",
   },
 } as const;
 
-// API 請求函數
+// API Function
 export class ApiService {
+  // access token（client-side only）
+  static getAccessToken(): string | null {
+    if (typeof window === "undefined") return null;
+    return window.localStorage.getItem("access_token");
+  }
+
   private static async request<T>(
     endpoint: string,
     options: RequestInit = {}
@@ -45,10 +51,7 @@ export class ApiService {
 
     try {
       // Attach Authorization header if access token exists (client-side only)
-      const token =
-        typeof window !== "undefined"
-          ? window.localStorage.getItem("access_token")
-          : null;
+      const token = this.getAccessToken();
       const headers = new Headers(defaultOptions.headers);
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -94,7 +97,7 @@ export class ApiService {
     }
   }
 
-  // 老師註冊
+  // Teacher Register
   static async registerTeacher(
     data: TeacherRegisterRequest
   ): Promise<TeacherResponse> {
@@ -104,7 +107,7 @@ export class ApiService {
     });
   }
 
-  // 老師登入
+  // Teacher Login
   static async loginTeacher(data: TeacherLoginRequest): Promise<TokenResponse> {
     return this.request<TokenResponse>(API_ENDPOINTS.TEACHER.LOGIN, {
       method: "POST",
@@ -112,7 +115,7 @@ export class ApiService {
     });
   }
 
-  // 取得老師資訊
+  // Get Teacher
   static async getTeacherById(id: number): Promise<TeacherResponse> {
     return this.request<TeacherResponse>(API_ENDPOINTS.TEACHER.INFO(id), {
       method: "GET",
@@ -120,7 +123,7 @@ export class ApiService {
     });
   }
 
-  // 學生註冊
+  // Student Register
   static async registerStudent(
     data: StudentRegisterRequest
   ): Promise<StudentResponse> {
@@ -130,7 +133,7 @@ export class ApiService {
     });
   }
 
-  // 學生登入
+  // Student Login
   static async loginStudent(
     data: StudentLoginRequest
   ): Promise<StudentResponse> {

@@ -1,7 +1,9 @@
 "use client";
 
 // TODO: Add eye and eye closed for password
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
@@ -17,17 +19,15 @@ import {
   FormMessage,
 } from "@/app/components/ui/form";
 import { Input } from "@/app/components/ui/input";
-import Link from "next/link";
+import { toast } from "sonner";
+
 import { Locale } from "@/i18n/request";
 import {
   StudentLoginRequest,
   TeacherLoginRequest,
   TokenResponse,
 } from "@/types/auth";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { ApiService } from "@/constants";
-import { toast } from "sonner";
 
 const studentFormSchema = z.object({
   login_code: z
